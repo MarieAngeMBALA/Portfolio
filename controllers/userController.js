@@ -39,3 +39,33 @@ exports.login = async (req, res) => {
       res.status(500).json({ error: 'User authentication error' });
     }
   };
+
+
+  exports.register = async (req, res) => {
+    try {
+      console.log("received");
+      // Vérifier si l'utilisateur existe déjà
+      let user = await User.findOne({ username: req.body.username });
+      if (user) {
+        return res.status(400).json({ message: "User already exist." });
+      }
+  
+      // Hacher le mot de passe avant de l'enregistrer dans la base de données
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(req.body.password, salt);
+  
+      // Créer un nouvel utilisateur
+      user = new User({
+        username: req.body.username,
+        password: hashedPassword
+      });
+  
+      // Enregistrer l'utilisateur dans la base de données
+      await user.save();
+  
+      res.status(201).json({ message: "User created succesfully!" });
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).json({ message: "Erreur du serveur." });
+    }
+  };
