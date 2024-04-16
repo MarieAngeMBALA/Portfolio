@@ -10,7 +10,8 @@ const Login = () => {
     navigate('/portfolio'); // Redirige vers la page Portfolio
   };
   return (
-    <LoginForm onLoginClick={handleLoginClick} />
+    //<LoginForm onLoginClick={handleLoginClick} />
+    <LoginForm  />
   );
 };
 

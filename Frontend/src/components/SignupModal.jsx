@@ -16,17 +16,17 @@ const SignUpModal = ({ isOpen, onRequestClose, onSignUpSubmit }) => {
         try {
             console.log(`username: ${username} pwd: ${password}`);
             //const res = await axios.post('http://localhost:3000')
+
             const response = await axios.post('http://localhost:3000/api/users/register', {
                 username,
                 password
             });
     
-            if (response.status === 201) {
-                alert('Compte créé avec succès!');
-                onRequestClose(); // Fermez le modal
-            } else {
-                // Cela ne devrait normalement pas se produire, car axios lancerait une exception pour les réponses hors de 2xx
-                alert(response.data.message || 'Erreur lors de la création du compte.');
+            if (response.data.token) {
+            alert('Connexion réussie!');
+            // Vous pouvez stocker le token dans localStorage et rediriger l'utilisateur
+            localStorage.setItem('token', response.data.token);
+            window.location.href = '/home'; // Redirigez vers la page d'accueil ou tableau de bord
             }
         } catch (error) {
             console.log(error);
